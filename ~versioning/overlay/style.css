@@ -1,0 +1,291 @@
+@font-face {
+    font-family: Scheherazade;
+    src: url(../font/Scheherazade-Regular.ttf);
+}
+@font-face {
+    font-family: Scheherazade;
+    src: url(../font/Scheherazade-Bold.ttf);
+    font-weight: bold;
+}
+@font-face {
+    font-family: OpenSans;
+    src: url(../font/OpenSans-Regular.ttf);
+}
+@font-face {
+    font-family: Lovelo;
+    src: url(../font/Lovelo Black_0.otf);
+}
+textarea:focus, input:focus{
+    outline: none;
+}
+* {
+    color: #011C29;
+}
+body {
+    font: 16px OpenSans;
+    margin: 0;
+    overflow-y: scroll;
+}
+.banner {
+    background: url(../img/banner_back.svg);
+    width: 100%;
+    height: 100px;
+    font: bold 40px Lovelo;
+    color: gold;
+    text-align: right;
+    padding-right: 15px;
+    line-height: 103px;
+    box-sizing: border-box;
+    z-index: 10;
+    top: 0;
+    left: 0;
+}
+.banner:after {
+    position: absolute;
+    content: '';
+    top: 31px;
+    left: 0;
+    background: url(../img/banner_deco.svg);
+    height: 75px;
+    width: 232px;
+}
+.hide {
+    display: none;
+}
+.menu {
+    background: white;
+    width: 100%;
+    text-align: right;
+    padding: 10px 15px;
+    box-shadow: 0px 2px 5px 0px rgba(0,0,0,0.5);
+    background-color: white;
+    box-sizing: border-box;
+    z-index: 8;
+    top: 100px;
+    left: 0;
+}
+.menu span {
+    padding: 5px 15px;
+    cursor: pointer;
+    border-radius: 4px;
+    border: 1px solid #BDC3C7;
+}
+.menu span:hover {
+    background: #ECF0F1;
+}
+.menu span.active {
+    background: #58616B;
+    color: white;
+    border: 1px solid transparent;
+}
+button {
+    padding: 5px 15px;
+    cursor: pointer;
+    border-radius: 4px;
+    border: 0;
+    background: #58616B;
+    color: white;
+    font: 16px OpenSans;
+}
+.more {
+    padding: 10px 0 20px 0;
+    margin-top: 15px;
+    border-top: 1px solid #BDC3C7;
+    width: calc(100% - 500px);
+    float: right;
+    clear: both;
+    text-align: right;
+    display: none;
+    cursor: pointer;
+}
+#modalBigAya .sura_fullname {
+    text-align: center;
+    margin: 10px 0 40px 0;
+    padding: 20px;
+}
+.arabic {
+    direction: rtl;
+    font: 14px Scheherazade;
+}
+#modalBigAya .arabic {
+    font-size: 30px;
+}
+.arabic m {
+    font-weight: bold;
+    background: yellow;
+}
+#modalBigAya .arabic m {
+    color: #CC425B;
+    background: transparent;
+}
+.arabic m0 {
+    position: relative;
+    background: yellow;
+}
+.arabic m0 m1 {
+    display: none;
+}
+#modalBigAya .arabic m0 {
+    color: #3498DB;
+    background: transparent;
+}
+#modalBigAya .arabic m0 m1 {
+    display: block;
+    position: absolute;
+    top: 0;
+    right: 0;
+    color: #CC425B;
+    z-index: 10;
+}
+n {
+    color: #29B923;
+    transform: translateY(-4px);
+}
+.page {
+    display: none;
+    padding: 15px;
+    position: absolute;
+    width: 100%;
+    box-sizing: border-box;
+}
+.page.active {
+    display: block;
+}
+.tinted {
+    width: calc(100% - 500px);
+    height: 50px;
+    background: url(../img/gradient.png);
+    position: fixed;
+    z-index: 5;
+    top: 142px;
+    right: 0;
+}
+.searchpanel {
+    top: 142px;
+    left: 0;
+    width: 500px;
+    padding: 35px 15px 15px 15px;
+    box-sizing: border-box;
+    background: #E1E1E1;
+    height: calc(100vh - 142px);
+    text-align: right;
+    z-index: 5;
+    transform: translateX(-100%);
+    transition: all .3s ease-in-out;
+}
+.searchpanel.show {
+    transform: translateX(0);
+}
+.searchbox {
+    padding: 5px;
+    margin-bottom: 5px;
+    border: 0;
+    border-radius: 4px;
+    width: 100%;
+    box-sizing: border-box;
+    resize: none;
+    font-size: 30px;
+}
+.searchresult {
+    margin-top: 160px;
+    width: calc(100% - 500px);
+    float: right;
+}
+.checkbox {
+    margin-top: 5px;
+}
+.checkbox input {
+    vertical-align: middle;
+    transform: scale(1.4);
+}
+.sticky {
+    position: fixed;
+}
+.card {
+    padding: 15px 0;
+    cursor: pointer;
+}
+.sura_fullname {
+    color: #5fa6a4;
+    font-weight: bold;
+}
+.border {
+    padding: 60px;
+}
+#Dashboard {
+    margin-top: 160px;
+}
+#Verification {
+    text-align: right;
+}
+
+/* Gridster */
+.gridster ul
+{
+    list-style-type: none;
+    margin: auto;
+    padding: 0;
+}
+.gridster li {
+    box-shadow: 0px 2px 5px 0px rgba(0,0,0,0.5);
+    padding: 20px;
+    box-sizing: border-box;
+}
+
+/* Chart */
+.chartTitle {
+    font-size: 20px;
+    text-align: center;
+}
+.chartTable {
+    margin-top: 29px;
+}
+.chartTable tr:nth-child(even) {
+    background: #D1EFEF;
+}
+.chartTable tr:nth-child(odd) {
+    background: #A7E1E0;
+}
+.chartTable tr:first-child {
+    background: #668E90;
+    font-weight: bold;
+}
+.chartTable tr:first-child td {
+    color: white;
+    padding: 12px 4px;
+}
+.chartTable td:nth-child(3) {
+    text-align: center;
+}
+.piePadding {
+    padding: 20px;
+    width: 100%;
+    height: 100%;
+    box-sizing: border-box;
+}
+[class^=chartCard] * {
+    color: white;
+}
+.chartCard1 {
+    background: #00BEEE;
+}
+.chartCard2 {
+    background: #02A85C;
+}
+.chartCard3 {
+    background: #F56854;
+}
+.chartNumber {
+    margin-top: 20px;
+    padding-top: 28px;
+    border-top: 1px solid white;
+    font-size: 60px;
+    font-weight: bold;
+    text-align: center;
+}
+.chartQuote {
+    background: url(../img/quote.png);
+    width: 912px;
+    height: 220px;
+    margin: -20px;
+}

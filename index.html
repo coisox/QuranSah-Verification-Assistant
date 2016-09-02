@@ -1,0 +1,165 @@
+<!DOCTYPE HTML>
+<html>
+	<head>
+		<meta name="viewport" content="initial-scale=1, maximum-scale=1, user-scalable=no, width=device-width">
+        <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+        <title>Quransah Verification Assistant</title>
+        <link href="css/modal.css" rel="stylesheet">
+        <link href="lib/gridster/jquery.gridster.min.css" rel="stylesheet">
+        <link href="css/style.css" rel="stylesheet">
+        <script src="js/jquery2.1.4.min.js"></script>
+        <script src="js/removeDabt.js"></script>
+        <script src="js/Chart.min.js"></script>
+        <script src="lib/gridster/jquery.gridster.min.js"></script>
+	</head>
+
+	<body>
+        <div class="banner sticky">Quran Verification Assistant</div>
+        <div class="menu sticky">
+            <span class="active">Dashboard</span>
+            <span>Verification</span>
+            <span>Login</span>
+        </div>
+        
+        <div class="page active" id="Dashboard">
+            <div class="gridster">
+                <ul>
+                    <li data-row="1" data-col="1" data-sizex="2" data-sizey="2"><div class="chartTitle">Most Verified Sura</div><div class="piePadding"><canvas id="chartMostVerified" width="1" height="1"></canvas></div></li>
+                    <li data-row="1" data-col="3" data-sizex="2" data-sizey="2"><div class="chartTitle">Most Active Panel</div><table class="chartTable" width="100%" border="0" cellspacing="1" cellpadding="4"><tr><td>No.</td><td>Name</td><td>Activity</td></tr><tr><td>1</td><td>Prof Dr Wan Zahari</td><td>5447</td></tr><tr><td>2</td><td>Prof Dr Syed Alwi</td><td>5261</td></tr><tr><td>3</td><td>Muhamad Rais</td><td>4522</td></tr><tr><td>4</td><td>Adzimat Masuood</td><td>3025</td></tr><tr><td>5</td><td>Mohd Hazmi Kasmin</td><td>1443</td></tr><tr><td>6</td><td></td><td></td></tr><tr><td>7</td><td></td><td></td></tr><tr><td>8</td><td></td><td></td></tr><tr><td>9</td><td></td><td></td></tr><tr><td>10</td><td></td><td></td></tr></table></li>
+                    <li data-row="1" data-col="5" data-sizex="2" data-sizey="1" class="chartCard1"><div class="chartTitle">Total Question</div><div class="chartNumber">20,000</div></li>
+                    <li data-row="2" data-col="5" data-sizex="2" data-sizey="1" class="chartCard2"><div class="chartTitle">Answered Question</div><div class="chartNumber">15,000</div></li>
+                    <li data-row="3" data-col="5" data-sizex="2" data-sizey="1" class="chartCard3"><div class="chartTitle">Pending Question</div><div class="chartNumber">5,000</div></li>
+                    <li data-row="3" data-col="1" data-sizex="4" data-sizey="1"><div class="chartQuote"></div></li>
+                </ul>
+            </div>
+        </div>
+        
+        <div class="searchpanel sticky">
+            <textarea class="searchbox arabic" autocomplete="off" rows="5">بِسْمِ ٱلرِّحْمُنِ ٱلرحيم ملك</textarea>
+            <button onclick="search('new')">Search</button>
+            <!--
+            <div class="checkbox"><input type="checkbox"> Exact Match</div>
+            -->
+        </div>
+        <div class="page" id="Verification">
+            <div class="tinted"></div>
+            <div class="searchresult"></div>
+            <div class="more" onclick="search('more')"><span>Load more...</span><img src="img/loader.gif"></div>
+        </div>
+        
+        <div id="modalBigAya" class="modal">
+            <div class="modal-content">
+                <div class="border">
+                    <div class="sura_fullname">Data not ready. Try again.</div>
+                    <div class="arabic">Data not ready. Try again.</div>
+                </div>
+            </div>
+        </div>
+        
+		<script>
+            $(".gridster ul").gridster({
+                widget_margins: [10, 10],
+                widget_base_dimensions: [220, 220],
+                resize: {
+                    enabled: false
+                }
+            });
+
+			$(document).ready(function(){
+                //handling navigation
+                $('.menu span').click(function(){
+                    $('.menu span, .page').removeClass('active');
+                    $(this).addClass('active');
+                    $('.page[id="'+$(this).text()+'"]').addClass('active');
+                    
+                    if($(this).text()=='Verification') $('.searchpanel').addClass('show');
+                    else $('.searchpanel').removeClass('show');
+                });
+                
+                //handling modal
+                $('.close').click(function(){ $('.modal').hide() });
+                window.onclick = function(event) { if ($(event.target).attr('class')=='modal') $('.modal').hide(); }
+                
+                //chart
+                var chartMostVerified = new Chart($('#chartMostVerified'),{
+                    type: 'pie',
+                    data: {
+                        labels: ["Al-Baqara", "Al-Maaida", "Ibrahim", "An-Nahl", "As-Saaffaat"],
+                        datasets: [{data: [300, 50, 100, 270, 600], backgroundColor: ["#4D5360", "#F7464A", "#46BFBD", "#FDB45C", "#949FB1"]}]
+                    },
+                    options: {cutoutPercentage: 0, animation: false}
+                });
+			}); //end of document ready
+            
+            var more = 0;
+            function search(type) {
+                if(type=='new') {
+                    more = 0;
+                    $('.searchresult').html('');
+                }
+                else {
+                    more += 10;
+                }
+                $('.more').show();
+                $('.more span, #nomatch').hide();
+                $('.more img').show();
+
+                var keyword = $('.searchbox').val().replace(/ ﴿.*?﴾ /g,' ');
+                
+                $.ajax({
+                    type: 	"POST",
+                    dataType: "json",
+                    url: "search.php",
+                    data: {"keyword":removeDhabt(keyword), "more":more},
+                    success: function(msg){
+                        var structure = '';
+                        keyword = keyword.split(' ');
+                        
+                        for(var a in msg) {
+                            //highlight keyword
+                            var special = [];
+                            var source = msg[a].sentence.split(' ');
+                            for(var s=0; s<source.length; s++) {
+                                for(var k=0; k<keyword.length; k++) {
+                                    if(keyword[k]==source[s]) {
+                                        special.push(removeDhabt(source[s]));
+                                        source[s] = '<ma tip="Both word and dhabt matched">'+source[s]+'</ma>';
+                                    }
+                                    else if(removeDhabt(keyword[k])==removeDhabt(source[s])) {
+                                        if(special.indexOf(removeDhabt(source[s]))>-1) {
+                                            source[s] = '<ma tip="Only word matched">'+source[s]+'</ma>';
+                                        }
+                                        else {
+                                            source[s] = '<mw tip="Only word matched">'+source[s]+'</mw>';
+                                        }
+                                    }
+                                }
+                            }
+                            
+                            structure += '<div id='+msg[a].id+' class=card onclick="showBigAya('+msg[a].id+')"><div class=sura_fullname>'+msg[a].sura_fullname+'</div><div class=arabic>'+source.join(' ')+'</div></div>';  
+                        }
+                        
+                        if(structure!='') {
+                            $('.searchresult').append(structure.replace(/(﴿.*?﴾)/g,'<n>$1</n>'));
+                            $('.more span').show();
+                            $('.more img').hide();
+                        }
+                        else if(more) {
+                            $('.more').hide();
+                        }
+                        else {
+                            $('.searchresult').append('<span id=nomatch>Your search <m>'+$('.searchbox').val()+'</m> did not match any aya.</span>');
+                            $('.more').hide();
+                        }
+                    }
+                });
+            }
+            
+            function showBigAya(id) {
+                $('#modalBigAya .sura_fullname').text($('.card#'+id+' .sura_fullname').text());
+                $('#modalBigAya .arabic').html($('.card#'+id+' .arabic').html());
+                $('#modalBigAya').show();
+            }
+		</script>
+	</body>
+</html>
